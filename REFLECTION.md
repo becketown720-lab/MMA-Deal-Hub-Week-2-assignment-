@@ -16,11 +16,13 @@ In brief conclusion, according to CASE's annual complaint statistics, complaints
 The philosophy behind my product design is to solve the pain point of the problem above, through finding the transferable gym contracts (although they are in small numbers among the gyms in Singapore) and make good use of it as the original holders can not fulfill the contracts due to various reasons. The process is designed to ease the difficulty to enter MMA gym for customers due to afraid of high penalty of cancelling gym contract and stubborn contract term.
 
 Q2:Augmented capacity and constrained capacity
+As a zero-code/non-professional front-end developer, I was able to build a complete and working React interactive page using natural language within 30 minutes, freeing up my energy to focus on product logic design.
 The Constraint: Inability to evaluate unread code while creating and relying on tool defaults. Because the AI ​​generated over a dozen React components and configuration files in seconds, I could only evaluate the product by inspecting its surface-level preview (UI) rather than auditing the underlying codebase.
 
 Exact timing:
 When importing the codebase into Vercel, Vercel automatically flagged "Environment variable 2 detected," revealing that Google AI Studio had quietly injected the server-side Gemini API key handler into the vite.config.ts file. I didn't realize the existence of this hidden backend scaffolding code until Vercel exposed it during deployment; masterprompt still cannot replace manual verification.
 
+你在哪里输出了真正的决策（如 Guardrails），哪里你只是名义上在 Loop 但实际直接接受了 AI 输出
 
 Q3: In, on, or out of the loop: where was your judgment actually needed? 
 
