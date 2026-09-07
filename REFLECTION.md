@@ -22,8 +22,6 @@ The Constraint: Inability to evaluate unread code while creating and relying on 
 Exact timing:
 When importing the codebase into Vercel, Vercel automatically flagged "Environment variable 2 detected," revealing that Google AI Studio had quietly injected the server-side Gemini API key handler into the vite.config.ts file. I didn't realize the existence of this hidden backend scaffolding code until Vercel exposed it during deployment; masterprompt still cannot replace manual verification.
 
-你在哪里输出了真正的决策（如 Guardrails），哪里你只是名义上在 Loop 但实际直接接受了 AI 输出
-
 Q3: In, on, or out of the loop: where was your judgment actually needed? 
 
 Q3-part 1：
