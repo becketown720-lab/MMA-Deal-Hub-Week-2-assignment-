@@ -1,5 +1,5 @@
 Markdown
-# PROMPTS.md - [MMA-Deal-Hub]
+# prompts.md - [MMA-Deal-Hub]
 **Student:** [Beichao Wang] · **Course:** MGMT 6110 · **Problem Set 1**
 **User sentence:** A price-sensitive office worker in the CBD opens this screen to select and order a discounted second-handed MMA gym contract near the Central/South region in Singapore, and knows it worked when they see 'Order Placed' with a reference number and queue position.
 
