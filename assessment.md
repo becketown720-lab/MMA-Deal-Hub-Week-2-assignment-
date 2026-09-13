@@ -1,10 +1,15 @@
-Markdown
+# MGMT6110 Assessment
+
+Name: Beichao Wang
+
+# Problem Set 1
+
+---
+
 # assessment.md - MMA Deal Hub
 **Student:** [Beichao Wang] · **Course:** MGMT 6110 · **Problem Set 1**
 **Live App:** [[你的 Vercel 链接](https://my-projectmmadealhub.vercel.app/)]
 **GitHub Repository:** [[你的 GitHub 仓库链接](https://github.com/becketown720-lab/MMA-Deal-Hub-Week-2-assignment-.git)]
-
----
 
 ### Q1: Who are your users, and what changes for them?
 User category: External
@@ -54,3 +59,25 @@ Q5: Learning pointers for the organisational context
 Point 1: Schedule more budget and hire AI sanction professionals on AI governance, especially on underlying code generating status sanctions, authorization has to be made before deployment.
 Point 2: A sound accountability mechanism must be established, with clear records of who operates and generates the AI. This will allow for accountability if problems occur. Accountability can be achieved in two steps: first, the AI ​​operator conducts a self-inspection to identify problems; second, the AI ​​review team investigates. If problems occur in the second step, the operator will face severe penalties.
 Point 3: Before deploying any AI-assisted generated application, business units must mandate the archiving of a complete PROMPTS.md file containing the full R&D and GOC codes in their GitHub repository. This allows for future traceability by those taking over (avoiding situations where the person who wrote the code leaves, leaving the code unattended). The professor's requirement for detailed documentation of every prompt is essential. This corresponds to my use of PROMPTS.md to record the process from the Master Prompt during development.
+
+---
+
+# Problem Set 2
+
+## Claims identified in the original product
+
+……
+
+## Front-end criteria and assessment
+
+……
+
+## Back-end criteria and assessment
+
+……
+
+## Human-AI collaboration questions
+
+……
+
+
