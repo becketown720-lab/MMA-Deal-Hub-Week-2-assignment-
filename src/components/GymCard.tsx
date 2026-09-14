@@ -91,7 +91,7 @@ export const GymCard: React.FC<GymCardProps> = ({ contract, onSelect }) => {
               <span className="text-xs font-semibold text-slate-700">months</span>
             </div>
             <p className="text-[11px] text-emerald-600 font-medium flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3 inline" /> Transfer approved
+              <CheckCircle2 className="w-3 h-3 inline" /> Illustrative listing
             </p>
           </div>
         </div>
