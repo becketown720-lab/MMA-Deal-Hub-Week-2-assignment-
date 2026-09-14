@@ -474,7 +474,44 @@ Show me:
 Do not modify the footer or other prototype wording yet.
 Do not proceed to attribution or documentation.
 
----
+##prompt modification
+
+Modify only `src/components/GymDiscoveryScreen.tsx`.
+
+Make these exact text replacements:
+
+1. `Central & South Singapore Deals`
+   → `Central & South Singapore Examples`
+
+2. `Second-Hand MMA Gym Contracts`
+   → `Second-Hand MMA Gym Contract Examples`
+
+3. Replace:
+
+`Take over verified gym memberships near Raffles Place, Tanjong Pagar & HarbourFront. Save up to 40% with zero long-term signup lock-ins.`
+
+with:
+
+`Explore illustrative contract-transfer scenarios designed for CBD office workers. Gym names, prices, locations and availability shown below are fictional prototype data.`
+
+4. `Featured Orders`
+   → `Featured Examples`
+
+5. `Showing {processedContracts.length} available contracts`
+   → `Showing {processedContracts.length} illustrative contract examples`
+
+6. `No gym contracts match your current filter.`
+   → `No contract examples match your current filter.`
+
+7. `Show all available deals`
+   → `Show all contract examples`
+
+Change text only. Do not change any logic, styling, state or event handlers.
+
+Do not modify any other file.
+
+After editing, run the TypeScript check and build. Confirm that only `src/components/GymDiscoveryScreen.tsx` was modified. Do not continue to another task.
+
 
 
 
