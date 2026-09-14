@@ -779,3 +779,252 @@ After editing:
 5. Confirm that the Open-Meteo link uses `target="_blank"` and `rel="noreferrer"`.
 
 Show me the exact updated footer JSX and the validation results. Do not continue to another task.
+
+
+
+
+## Here are test prompts:
+
+## Test 1 — Loading
+
+### Prompt or action
+
+No Gemini prompt was used for this test.
+
+I opened the live website in Chrome and used Developer Tools:
+
+1. Opened the Network tab.
+2. Enabled `Disable cache`.
+3. Changed network throttling from `No throttling` to `3G`.
+4. Refreshed the live website.
+
+### Expected result
+
+While `/api/weather` was pending, the header should display:
+
+```text
+Getting the latest Singapore CBD weather…
+```
+
+### Result
+
+The loading message and spinner appeared while the weather request was pending. I captured a screenshot and then restored the browser to `No throttling` and disabled the `Disable cache` option.
+
+---
+
+## Test 2 — Empty
+
+### Prompt sent to Gemini
+
+```text
+This is a temporary Empty-state test for MGMT6110 Problem Set 2.
+
+Modify only:
+
+api/weather.js
+
+Make one temporary change only:
+
+In OPEN_METEO_URL, remove this query parameter:
+
+current=temperature_2m,precipitation
+
+Keep the latitude, longitude, daily forecast and timezone parameters unchanged.
+
+The resulting Open-Meteo request should still return HTTP 200 with daily data, but it should not contain the current object. The existing validation in api/weather.js should therefore return:
+
+{
+  "data": null,
+  "source": "Open-Meteo"
+}
+
+Do not change any error handling, response logic, frontend file, health endpoint, cache header or other file.
+
+Run the production build afterward and confirm that only api/weather.js was modified.
+
+This is a deliberate temporary test. Do not attempt to fix the resulting Empty message.
+```
+
+### Gemini result
+
+Gemini modified only `api/weather.js` and changed the URL to:
+
+```javascript
+const OPEN_METEO_URL =
+  'https://api.open-meteo.com/v1/forecast?latitude=1.29&longitude=103.85&daily=temperature_2m_max&timezone=Asia%2FSingapore';
+```
+
+The production build succeeded.
+
+### Deployment and observed result
+
+I pushed the temporary change to GitHub with:
+
+```text
+test: verify empty weather state
+```
+
+After Vercel deployed it:
+
+- `/api/weather` returned `data: null`.
+- The homepage displayed:
+
+```text
+The weather service responded, but no current reading is available.
+```
+
+I captured screenshots of both results.
+
+---
+
+## Test 3 — Refused
+
+### Prompt sent to Gemini
+
+```text
+This is a temporary Refused-state test for MGMT6110 Problem Set 2.
+
+Modify only:
+
+api/weather.js
+
+Make one temporary change to OPEN_METEO_URL.
+
+Restore the current parameter, but change the latitude to the deliberately invalid value 999.
+
+Use this exact URL:
+
+https://api.open-meteo.com/v1/forecast?latitude=999&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore
+
+Open-Meteo should respond with a non-2xx status because the latitude is invalid. The existing api/weather.js logic must remain unchanged and should return a response shaped like:
+
+{
+  "error": "The weather provider refused the request.",
+  "kind": "refused",
+  "upstreamStatus": 400
+}
+
+Do not modify the error handling, frontend, health endpoint, cache behavior or any other file.
+
+Run the production build and confirm that only api/weather.js was modified.
+
+This is a deliberate temporary test. Do not fix the resulting Refused message.
+```
+
+### Gemini result
+
+Gemini modified only `api/weather.js` and changed the URL to:
+
+```javascript
+const OPEN_METEO_URL =
+  'https://api.open-meteo.com/v1/forecast?latitude=999&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore';
+```
+
+The production build succeeded.
+
+### Deployment and observed result
+
+I pushed the temporary change to GitHub with:
+
+```text
+test: verify refused weather state
+```
+
+After Vercel deployed it:
+
+- `/api/weather` returned `kind: "refused"` and `upstreamStatus: 400`.
+- The homepage displayed:
+
+```text
+The weather provider refused the request. Please try again later.
+```
+
+I captured screenshots of both results.
+
+---
+
+## Test 4 — Unreachable
+
+### Prompt sent to Gemini
+
+```text
+This is the temporary Unreachable-state test for MGMT6110 Problem Set 2.
+
+Modify only:
+
+api/weather.js
+
+Replace OPEN_METEO_URL with this deliberately unreachable URL:
+
+https://weather-service-test.invalid/v1/forecast?latitude=1.29&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore
+
+The .invalid domain is deliberately non-existent. The existing fetch should fail, and the existing catch path should return HTTP 502:
+
+{
+  "error": "The weather service could not be reached.",
+  "kind": "unreachable"
+}
+
+Do not change any error handling, timeout, response shape, frontend, health endpoint or other file.
+
+Run the production build and confirm that only api/weather.js was modified.
+
+This is a deliberate temporary test. Do not fix it yet.
+```
+
+### Gemini result
+
+Gemini modified only `api/weather.js` and changed the URL to:
+
+```javascript
+const OPEN_METEO_URL =
+  'https://weather-service-test.invalid/v1/forecast?latitude=1.29&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore';
+```
+
+The production build succeeded.
+
+### Deployment and observed result
+
+I pushed the temporary change to GitHub with:
+
+```text
+test: verify unreachable weather state
+```
+
+After Vercel deployed it:
+
+- `/api/weather` returned HTTP 502 with `kind: "unreachable"`.
+- The homepage displayed:
+
+```text
+The weather service cannot be reached right now. Please try again later.
+```
+
+I captured screenshots of both results.
+
+---
+
+## Restore the Production Endpoint
+
+### Prompt sent to Gemini
+
+```text
+The Unreachable-state test is complete. Restore the production weather service immediately.
+
+Modify only:
+
+api/weather.js
+
+Replace the temporary .invalid URL with this exact working production URL:
+
+https://api.open-meteo
+
+
+
+
+
+
+
+
+
+
