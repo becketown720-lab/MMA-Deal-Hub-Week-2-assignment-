@@ -45,14 +45,13 @@ export const GymDiscoveryScreen: React.FC<GymDiscoveryScreenProps> = ({
       >
         <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">
           <Building2 className="w-4 h-4" />
-          <span>Central & South Singapore Deals</span>
+          <span>Central & South Singapore Examples</span>
         </div>
         <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white leading-tight">
-          Second-Hand MMA Gym Contracts
+          Second-Hand MMA Gym Contract Examples
         </h2>
         <p className="text-sm text-slate-300 mt-1.5 leading-relaxed max-w-xl">
-          Take over verified gym memberships near Raffles Place, Tanjong Pagar & HarbourFront.
-          Save up to 40% with zero long-term signup lock-ins.
+          Explore illustrative contract-transfer scenarios designed for CBD office workers. Gym names, prices, locations and availability shown below are fictional prototype data.
         </p>
       </section>
 
@@ -77,7 +76,7 @@ export const GymDiscoveryScreen: React.FC<GymDiscoveryScreenProps> = ({
               onChange={(e) => setSortOption(e.target.value as SortOption)}
               className="w-full text-sm font-semibold bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-[44px]"
             >
-              <option value="default">Featured Orders</option>
+              <option value="default">Featured Examples</option>
               <option value="price-asc">Price: Low to High ($)</option>
               <option value="duration-desc">Duration: Long to Short (Months)</option>
             </select>
@@ -110,7 +109,7 @@ export const GymDiscoveryScreen: React.FC<GymDiscoveryScreenProps> = ({
         {/* Quick Summary Pill Row */}
         <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
           <span className="font-semibold text-slate-700">
-            Showing {processedContracts.length} available contracts
+            Showing {processedContracts.length} illustrative contract examples
           </span>
           {(sortOption !== 'default' || durationFilter !== 'all') && (
             <button
@@ -140,7 +139,7 @@ export const GymDiscoveryScreen: React.FC<GymDiscoveryScreenProps> = ({
         {processedContracts.length === 0 && (
           <div className="col-span-full bg-white rounded-2xl p-8 text-center border border-slate-200">
             <p className="text-slate-600 font-medium">
-              No gym contracts match your current filter.
+              No contract examples match your current filter.
             </p>
             <button
               onClick={() => {
@@ -149,7 +148,7 @@ export const GymDiscoveryScreen: React.FC<GymDiscoveryScreenProps> = ({
               }}
               className="mt-3 text-sm font-bold text-amber-600 underline"
             >
-              Show all available deals
+              Show all contract examples
             </button>
           </div>
         )}
