@@ -46,10 +46,25 @@ export default function App() {
       </main>
 
       {/* Simple Footer for SMU Problem Set Context */}
-      <footer className="border-t border-slate-200/80 bg-slate-50 py-4 px-4 text-center text-xs text-slate-500">
+      <footer className="border-t border-slate-200/80 bg-slate-50 py-4 px-4 text-center text-xs text-slate-500 space-y-1">
         <p className="font-semibold text-slate-600">MMA Deal Hub (Singapore CBD & South)</p>
-        <p className="mt-0.5 text-[11px] text-slate-400">
-          Prototype created for MGMT 6110 Human-AI Collaboration • Built with invented data only.
+        <p className="text-[11px] text-slate-500">
+          Live weather data by{' '}
+          <a
+            href="https://open-meteo.com/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-amber-600 hover:text-amber-700 underline font-medium"
+          >
+            Open-Meteo
+          </a>
+          .
+        </p>
+        <p className="text-[11px] text-slate-400">
+          Gym contracts and the reservation flow are illustrative prototype data. No real order is submitted.
+        </p>
+        <p className="text-[11px] text-slate-400">
+          Prototype created for MGMT 6110 Human-AI Collaboration.
         </p>
       </footer>
     </div>
