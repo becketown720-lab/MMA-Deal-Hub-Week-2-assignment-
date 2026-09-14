@@ -73,7 +73,46 @@ Point 3: Before deploying any AI-assisted generated application, business units 
 ……
 
 ## Back-end criteria and assessment
+## PS2 — Manual API validation
 
+Before asking Gemini to build the backend, I manually opened the Open-Meteo API endpoint in my browser.
+
+Endpoint:
+
+https://api.open-meteo.com/v1/forecast?latitude=1.29&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore
+
+The request loaded successfully and returned JSON data. The relevant part of the real response was:
+
+```json
+{
+  "latitude": 1.3005272,
+  "longitude": 103.862564,
+  "timezone": "Asia/Singapore",
+  "timezone_abbreviation": "GMT+8",
+  "current_units": {
+    "time": "iso8601",
+    "interval": "seconds",
+    "temperature_2m": "°C",
+    "precipitation": "mm"
+  },
+  "current": {
+    "time": "2026-09-13T17:15",
+    "interval": 900,
+    "temperature_2m": 30.5,
+    "precipitation": 0
+  }
+}
+```
+
+I verified that the frontend would need to read:
+
+- `current.time`
+- `current.temperature_2m`
+- `current.precipitation`
+- `current_units.temperature_2m`
+- `current_units.precipitation`
+
+This manual check was necessary so that the AI would use the real response field names instead of guessing them.
 ……
 
 ## Human-AI collaboration questions
