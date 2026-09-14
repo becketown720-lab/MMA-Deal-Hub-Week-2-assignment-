@@ -38,101 +38,26 @@ CONTEXT: Individual Problem Set 1 for MGMT 6110 Human-AI Collaboration at SMU. B
 ---
 ---
 
-Data set 2
+###Data set 2
 
+# Prompt Log — MGMT6110 Problem Set 2
 
-Prompt 1:
-You are modifying my existing React, TypeScript and Vite project for MGMT6110 Problem Set 2.
+**Student:** Beichao Wang  
+**Project:** MMA Deal Hub  
+**Live site:** https://my-projectmmadealhub.vercel.app/  
+**GitHub repository:** https://github.com/becketown720-lab/MMA-Deal-Hub-Week-2-assignment-
 
-For this step, make ONE change only:
+This file records the prompts I used with Gemini while adding a real backend and live API data to my existing Problem Set 1 prototype. The prompts are listed in the order in which I used them. I asked Gemini to change one file or one narrowly defined part of the project at a time so that I could inspect each result before continuing.
 
-Create a Vercel serverless function at:
+## Manual API validation before prompting
+
+Before asking Gemini to write backend code, I opened this Open-Meteo URL in a browser:
 
 ```text
-api/weather.js
-```
-
-The `api` folder must be in the project root beside `package.json`, never inside `src`.
-
-Do not modify any existing file in this step.
-
-The function must call this exact Open-Meteo URL:
-
 https://api.open-meteo.com/v1/forecast?latitude=1.29&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore
-
-Requirements:
-
-1. Accept GET requests only. Return HTTP 405 for other methods.
-2. Use the built-in `fetch` API. Do not add any npm package.
-3. Use `AbortController` with an eight-second timeout.
-4. Check `upstream.ok` before parsing the response body.
-5. If the upstream request throws or times out, return HTTP 502:
-
-```json
-{
-  "error": "The weather service could not be reached.",
-  "kind": "unreachable"
-}
 ```
 
-6. If Open-Meteo returns a non-2xx response, return its HTTP status with:
-
-```json
-{
-  "error": "The weather provider refused the request.",
-  "kind": "refused",
-  "upstreamStatus": 400
-}
-```
-
-7. After a successful response, read only these fields:
-
-```text
-current.time
-current.temperature_2m
-current.precipitation
-current_units.temperature_2m
-current_units.precipitation
-```
-
-8. Zero is a valid value. Do not treat `0` as missing. Check for `null` or `undefined`.
-
-9. If the request succeeds but the required current reading is missing, return HTTP 200:
-
-```json
-{
-  "data": null,
-  "source": "Open-Meteo"
-}
-```
-
-10. For a valid response, return:
-
-```json
-{
-  "data": {
-    "temperature": 30.5,
-    "temperatureUnit": "°C",
-    "precipitation": 0,
-    "precipitationUnit": "mm",
-    "observedAt": "2026-09-13T17:15"
-  },
-  "source": "Open-Meteo"
-}
-```
-
-The values above only demonstrate the response shape. Do not hard-code them. Read fresh values from the Open-Meteo response.
-
-11. Add this header to successful and empty responses:
-
-```text
-Cache-Control: s-maxage=900, stale-while-revalidate=1800
-```
-
-12. Do not use an API key, environment variable, Express server or user-controlled upstream URL.
-13. Do not modify the frontend, health endpoint, documentation or existing wording in this step.
-
-This is the real response I observed manually:
+The request returned successfully and I observed this relevant part of the real response:
 
 ```json
 {
@@ -152,26 +77,128 @@ This is the real response I observed manually:
 }
 ```
 
+I recorded the returned field names and confirmed that precipitation could validly be zero. This prevented the AI from guessing the API response structure.
+
+## Prompt 1 — Create the weather backend endpoint
+
+```text
+You are modifying my existing React, TypeScript and Vite project for MGMT6110 Problem Set 2.
+
+For this step, make ONE change only:
+
+Create a Vercel serverless function at:
+
+api/weather.js
+
+The api folder must be in the project root beside package.json, never inside src.
+
+Do not modify any existing file in this step.
+
+The function must call this exact Open-Meteo URL:
+
+https://api.open-meteo.com/v1/forecast?latitude=1.29&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore
+
+Requirements:
+
+1. Accept GET requests only. Return HTTP 405 for other methods.
+2. Use the built-in fetch API. Do not add any npm package.
+3. Use AbortController with an eight-second timeout.
+4. Check upstream.ok before parsing the response body.
+5. If the upstream request throws or times out, return HTTP 502:
+
+{
+  "error": "The weather service could not be reached.",
+  "kind": "unreachable"
+}
+
+6. If Open-Meteo returns a non-2xx response, return its HTTP status with:
+
+{
+  "error": "The weather provider refused the request.",
+  "kind": "refused",
+  "upstreamStatus": 400
+}
+
+7. After a successful response, read only these fields:
+
+current.time
+current.temperature_2m
+current.precipitation
+current_units.temperature_2m
+current_units.precipitation
+
+8. Zero is a valid value. Do not treat 0 as missing. Check for null or undefined.
+
+9. If the request succeeds but the required current reading is missing, return HTTP 200:
+
+{
+  "data": null,
+  "source": "Open-Meteo"
+}
+
+10. For a valid response, return:
+
+{
+  "data": {
+    "temperature": 30.5,
+    "temperatureUnit": "°C",
+    "precipitation": 0,
+    "precipitationUnit": "mm",
+    "observedAt": "2026-09-13T17:15"
+  },
+  "source": "Open-Meteo"
+}
+
+The values above only demonstrate the response shape. Do not hard-code them. Read fresh values from the Open-Meteo response.
+
+11. Add this header to successful and empty responses:
+
+Cache-Control: s-maxage=900, stale-while-revalidate=1800
+
+12. Do not use an API key, environment variable, Express server or user-controlled upstream URL.
+13. Do not modify the frontend, health endpoint, documentation or existing wording in this step.
+
+This is the real response I observed manually:
+
+{
+  "timezone": "Asia/Singapore",
+  "current_units": {
+    "time": "iso8601",
+    "interval": "seconds",
+    "temperature_2m": "°C",
+    "precipitation": "mm"
+  },
+  "current": {
+    "time": "2026-09-13T17:15",
+    "interval": 900,
+    "temperature_2m": 30.5,
+    "precipitation": 0
+  }
+}
+
 After creating the file, show me:
 
-1. The complete contents of `api/weather.js`.
+1. The complete contents of api/weather.js.
 2. Confirmation that no other file was modified.
 3. A brief explanation of the success, empty, refused and unreachable response paths.
 
-Do not proceed to `/api/health` or frontend integration yet.
+Do not proceed to /api/health or frontend integration yet.
+```
 
-##prompt 2:
-The previous step is complete. Do not modify `api/weather.js`.
+**Result and review:** Gemini created only `api/weather.js` and reported a successful build. I checked that the file was in the root `api` folder, used the real Open-Meteo response fields, preserved zero as a valid value, and did not hard-code the observed temperature.
+
+## Prompt 2 — Create the health endpoint
+
+```text
+The previous step is complete. Do not modify api/weather.js.
 
 For this step, make ONE change only:
 
 Create a Vercel serverless health endpoint at:
 
-```text
 api/health.js
-```
 
-The file must be in the existing project-root `api` folder beside `api/weather.js`.
+The file must be in the existing project-root api folder beside api/weather.js.
 
 Do not modify any other file.
 
@@ -183,7 +210,7 @@ Open-Meteo does not require an API key, so the health response must report that 
 
 UPSTREAM URL
 
-Use the same endpoint as `api/weather.js`:
+Use the same endpoint as api/weather.js:
 
 https://api.open-meteo.com/v1/forecast?latitude=1.29&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore
 
@@ -192,26 +219,19 @@ REQUIREMENTS
 1. Accept GET requests only.
 
 2. For any other method:
-
-- Set the `Allow` header to `GET`.
+- Set the Allow header to GET.
 - Return HTTP 405.
 - Return JSON:
 
-```json
 {
   "error": "Method Not Allowed"
 }
-```
 
-3. Use the built-in `fetch` API. Do not install a package.
-
-4. Use an `AbortController` with an eight-second timeout.
-
+3. Use the built-in fetch API. Do not install a package.
+4. Use an AbortController with an eight-second timeout.
 5. The endpoint only needs to inspect whether Open-Meteo responds and what HTTP status it returns. It does not need to parse or return the weather response body.
-
 6. If Open-Meteo returns a successful 2xx response, return HTTP 200:
 
-```json
 {
   "status": "ok",
   "service": "Open-Meteo",
@@ -219,13 +239,11 @@ REQUIREMENTS
   "upstreamStatus": 200,
   "checkedAt": "CURRENT ISO TIMESTAMP"
 }
-```
 
-Use the actual upstream status and generate `checkedAt` at runtime with `new Date().toISOString()`. Do not hard-code the timestamp.
+Use the actual upstream status and generate checkedAt at runtime with new Date().toISOString(). Do not hard-code the timestamp.
 
 7. If Open-Meteo responds with a non-2xx status, the health endpoint itself should still return HTTP 200, with:
 
-```json
 {
   "status": "degraded",
   "service": "Open-Meteo",
@@ -233,13 +251,11 @@ Use the actual upstream status and generate `checkedAt` at runtime with `new Dat
   "upstreamStatus": 400,
   "checkedAt": "CURRENT ISO TIMESTAMP"
 }
-```
 
 Use the actual upstream status.
 
 8. If the fetch throws or times out, return HTTP 200:
 
-```json
 {
   "status": "degraded",
   "service": "Open-Meteo",
@@ -247,24 +263,19 @@ Use the actual upstream status.
   "upstreamStatus": "unreachable",
   "checkedAt": "CURRENT ISO TIMESTAMP"
 }
-```
 
 9. Set this header on every health response:
 
-```text
 Cache-Control: no-store
-```
 
 10. Do not return:
-
 - the upstream response body;
 - internal exception messages;
 - environment variables;
 - credential values;
 - the upstream URL.
 
-11. Do not import from or modify `api/weather.js`.
-
+11. Do not import from or modify api/weather.js.
 12. Do not modify the frontend, package.json, documentation or any existing component.
 
 VALIDATION
@@ -273,34 +284,36 @@ After creating the file:
 
 1. Run the existing build.
 2. Confirm that the build succeeds.
-3. Confirm that only `api/health.js` was created in this step.
+3. Confirm that only api/health.js was created in this step.
 
 FINAL RESPONSE
 
 Show me:
 
-1. The complete contents of `api/health.js`.
+1. The complete contents of api/health.js.
 2. Confirmation that no other file was modified.
 3. The build result.
-4. A short explanation of the `ok`, `degraded` and `unreachable` health results.
+4. A short explanation of the ok, degraded and unreachable health results.
 
 Do not proceed to frontend integration.
+```
 
-##prompt3:
+**Result and review:** Gemini created only `api/health.js` and reported a successful build. Its main success and degraded response shapes were correct, but my review found that one response path did not receive the required cache header.
 
-I reviewed `api/health.js` and found one requirement that was not fully met.
+## Prompt 3 — Correct a missed requirement in the AI output
 
-The `Cache-Control: no-store` header is currently defined and applied after the request-method check. Therefore, the HTTP 405 response does not receive the required no-store header.
+```text
+I reviewed api/health.js and found one requirement that was not fully met.
+
+The Cache-Control: no-store header is currently defined and applied after the request-method check. Therefore, the HTTP 405 response does not receive the required no-store header.
 
 Make ONE small correction only:
 
-Ensure that every response from `api/health.js`, including the HTTP 405 Method Not Allowed response, contains:
+Ensure that every response from api/health.js, including the HTTP 405 Method Not Allowed response, contains:
 
-```text
 Cache-Control: no-store
-```
 
-You may define `responseHeaders` before the method check and pass it to the 405 `sendJson` call.
+You may define responseHeaders before the method check and pass it to the 405 sendJson call.
 
 Do not change the endpoint’s other behavior, wording, response shapes, timeout, upstream URL or status logic.
 
@@ -309,73 +322,62 @@ Do not modify any other file.
 After the correction:
 
 1. Show the exact changed section.
-2. Confirm that only `api/health.js` was modified.
+2. Confirm that only api/health.js was modified.
 3. Run the build and report the result.
+```
 
-##prompt 4
+**Result and review:** Gemini moved the `responseHeaders` definition before the request-method check and passed it to the 405 response. Only `api/health.js` changed and the build succeeded. This was a case where I did not accept the first AI result without checking it.
+
+## Prompt 4 — Connect the frontend to the backend
+
+```text
 The two backend endpoints are complete.
 
 For this step, make ONE frontend change only:
 
-Modify `src/components/Header.tsx` so that the existing hard-coded “Verified Deals” status area fetches and displays live weather from:
+Modify src/components/Header.tsx so that the existing hard-coded “Verified Deals” status area fetches and displays live weather from:
 
-```text
 /api/weather
-```
 
-Modify only `src/components/Header.tsx`.
+Modify only src/components/Header.tsx.
 
-Do not modify `App.tsx`, either backend file, any other component, documentation, package.json or configuration.
+Do not modify App.tsx, either backend file, any other component, documentation, package.json or configuration.
 
 REQUIREMENTS
 
 1. Remove the hard-coded “Verified Deals” text from the header.
-
-2. When `Header` mounts, fetch:
-
-```text
-/api/weather
-```
-
-Use a relative URL exactly as shown.
-
-3. Browser code must never call `api.open-meteo.com` directly.
-
+2. When Header mounts, fetch /api/weather. Use a relative URL exactly as shown.
+3. Browser code must never call api.open-meteo.com directly.
 4. Use React state to distinguish:
 
-```text
 loading
 success
 empty
 refused
 unreachable
-```
 
-5. Initial state must be `loading`.
-
-6. Use an `AbortController` for the frontend request and abort it when the component unmounts.
-
+5. Initial state must be loading.
+6. Use an AbortController for the frontend request and abort it when the component unmounts.
 7. Do not update React state if the request was aborted because the component unmounted.
 
 STATE DETECTION
 
 Use these rules:
 
-- While `/api/weather` is pending: `loading`.
-- HTTP 200 with `data: null`: `empty`.
-- HTTP 200 with valid weather data: `success`.
-- HTTP 502 or response JSON with `kind: "unreachable"`: `unreachable`.
-- A browser network error while calling `/api/weather`: `unreachable`.
-- Any other non-2xx response, including `kind: "refused"`: `refused`.
-- If HTTP 200 returns an unexpected or invalid response shape, treat it as `empty`.
+- While /api/weather is pending: loading.
+- HTTP 200 with data: null: empty.
+- HTTP 200 with valid weather data: success.
+- HTTP 502 or response JSON with kind: "unreachable": unreachable.
+- A browser network error while calling /api/weather: unreachable.
+- Any other non-2xx response, including kind: "refused": refused.
+- If HTTP 200 returns an unexpected or invalid response shape, treat it as empty.
 
 Do not silently fall back to hard-coded weather data.
 
 SUCCESS RESPONSE SHAPE
 
-The successful `/api/weather` response looks like:
+The successful /api/weather response looks like:
 
-```json
 {
   "data": {
     "temperature": 30.5,
@@ -386,57 +388,39 @@ The successful `/api/weather` response looks like:
   },
   "source": "Open-Meteo"
 }
-```
 
-The values above are examples only. Do not hard-code `30.5`, `0` or the timestamp.
+The values above are examples only. Do not hard-code 30.5, 0 or the timestamp.
 
-Zero is a valid weather value. Do not treat `0` as missing.
+Zero is a valid weather value. Do not treat 0 as missing.
 
 DISPLAY TEXT
 
 Display the following visibly different messages:
 
 Loading:
-
-```text
 Getting the latest Singapore CBD weather…
-```
 
 Success:
-
-```text
 CBD {temperature}{temperatureUnit} · Rain {precipitation} {precipitationUnit}
-```
 
 Empty:
-
-```text
 The weather service responded, but no current reading is available.
-```
 
 Refused:
-
-```text
 The weather provider refused the request. Please try again later.
-```
 
 Unreachable:
-
-```text
 The weather service cannot be reached right now. Please try again later.
-```
 
 For the success state, also show the observation time beneath or beside the weather reading:
 
-```text
 Observed {observedAt} SGT
-```
 
-Format the returned string for readability without inventing a different time. Because the API response already uses `Asia/Singapore`, it is acceptable to replace `T` with a space and append `SGT`.
+Format the returned string for readability without inventing a different time. Because the API response already uses Asia/Singapore, it is acceptable to replace T with a space and append SGT.
 
 ACCESSIBILITY AND LAYOUT
 
-- Add `aria-live="polite"` to the changing status area.
+- Add aria-live="polite" to the changing status area.
 - Preserve the existing header design as closely as practical.
 - Allow long error messages to wrap.
 - Make sure the header does not overflow on mobile.
@@ -444,9 +428,9 @@ ACCESSIBILITY AND LAYOUT
 
 TYPES
 
-Define any small TypeScript types needed inside `Header.tsx`.
+Define any small TypeScript types needed inside Header.tsx.
 
-Do not use `any` unless there is no reasonable alternative.
+Do not use any unless there is no reasonable alternative.
 
 Do not install any package.
 
@@ -457,573 +441,288 @@ After making the change:
 1. Run the existing TypeScript check.
 2. Run the production build.
 3. Fix only errors caused by this change.
-4. Search `src` and confirm that `api.open-meteo.com` does not appear in browser code.
-5. Confirm that `Header.tsx` calls only `/api/weather`.
-6. Confirm that the example value `30.5` was not added to the source code.
+4. Search src and confirm that api.open-meteo.com does not appear in browser code.
+5. Confirm that Header.tsx calls only /api/weather.
+6. Confirm that the example value 30.5 was not added to the source code.
 
 FINAL RESPONSE
 
 Show me:
 
-1. The complete updated `src/components/Header.tsx`.
-2. Confirmation that only `Header.tsx` was modified.
+1. The complete updated src/components/Header.tsx.
+2. Confirmation that only Header.tsx was modified.
 3. The TypeScript check result.
 4. The production build result.
 5. A short explanation of how each of the five states is detected.
 
 Do not modify the footer or other prototype wording yet.
 Do not proceed to attribution or documentation.
+```
 
+**Result and review:** Gemini changed only `Header.tsx`. The TypeScript check and production build passed. I verified that the browser called the relative `/api/weather` route and did not call Open-Meteo directly. After pushing to GitHub, Vercel deployed the change and the live page displayed current weather.
 
-
-##prompt modification 1
-
-
-
-Modify only `src/components/GymDiscoveryScreen.tsx`.
-
-Make these exact text replacements:
-
-1. `Central & South Singapore Deals`
-   → `Central & South Singapore Examples`
-
-2. `Second-Hand MMA Gym Contracts`
-   → `Second-Hand MMA Gym Contract Examples`
-
-3. Replace:
-
-`Take over verified gym memberships near Raffles Place, Tanjong Pagar & HarbourFront. Save up to 40% with zero long-term signup lock-ins.`
-
-with:
-
-`Explore illustrative contract-transfer scenarios designed for CBD office workers. Gym names, prices, locations and availability shown below are fictional prototype data.`
-
-4. `Featured Orders`
-   → `Featured Examples`
-
-5. `Showing {processedContracts.length} available contracts`
-   → `Showing {processedContracts.length} illustrative contract examples`
-
-6. `No gym contracts match your current filter.`
-   → `No contract examples match your current filter.`
-
-7. `Show all available deals`
-   → `Show all contract examples`
-
-Change text only. Do not change any logic, styling, state or event handlers.
-
-Do not modify any other file.
-
-After editing, run the TypeScript check and build. Confirm that only `src/components/GymDiscoveryScreen.tsx` was modified. Do not continue to another task.
-
-
-##prompt modification 2
-
-
-Modify only `src/components/GymCard.tsx`.
-
-Make one text change only:
-
-Replace:
+## Prompt 5 — First attempt to clarify fictional prototype content
 
 ```text
+Modify only src/components/GymDiscoveryScreen.tsx.
+
+Clarify that the gym contracts displayed on the page are fictional prototype examples rather than verified real listings. Replace the existing deal and availability wording with example wording, while preserving all logic, styling, filters and event handlers.
+
+Do not modify any other file. Run the TypeScript check and production build after the edit.
+```
+
+**Result and review:** AI Studio appeared to freeze after I sent this prompt. After refreshing, the interface showed a checkpoint involving `PROMPTS.md`, `README.md` and `assessment.md`, but the requested strings in `GymDiscoveryScreen.tsx` were unchanged. I inspected the component instead of assuming the request had completed. I then retried with explicit replacements.
+
+## Prompt 6 — Retry with exact prototype wording replacements
+
+```text
+Modify only src/components/GymDiscoveryScreen.tsx.
+
+Make only these exact text replacements:
+
+1. Central & South Singapore Deals
+   → Central & South Singapore Examples
+
+2. Second-Hand MMA Gym Contracts
+   → Second-Hand MMA Gym Contract Examples
+
+3. Take over verified gym memberships near Raffles Place, Tanjong Pagar & HarbourFront. Save up to 40% with zero long-term signup lock-ins.
+   → Explore illustrative contract-transfer scenarios designed for CBD office workers. Gym names, prices, locations and availability shown below are fictional prototype data.
+
+4. Featured Orders
+   → Featured Examples
+
+5. Showing {processedContracts.length} available contracts
+   → Showing {processedContracts.length} illustrative contract examples
+
+6. No gym contracts match your current filter.
+   → No contract examples match your current filter.
+
+7. Show all available deals
+   → Show all contract examples
+
+Do not change logic, styling, state or event handlers. Do not modify any other file.
+
+Run the TypeScript check and production build. Show the replacements made and confirm that only src/components/GymDiscoveryScreen.tsx changed.
+```
+
+**Result and review:** The requested text was replaced, only `GymDiscoveryScreen.tsx` changed, and both checks passed. I pushed the change and inspected the deployed page.
+
+## Prompt 7 — Clarify the status shown on each card
+
+```text
+Modify only src/components/GymCard.tsx.
+
+Replace this visible text:
+
 Transfer approved
-```
 
 with:
 
-```text
 Illustrative listing
+
+Do not change any other text, calculation, styling, component prop or button behavior. Do not modify any other file.
+
+Run the TypeScript check and production build. Confirm that only src/components/GymCard.tsx changed.
 ```
 
-Do not change any other text, calculation, styling, component prop, button behavior or file.
+**Result and review:** Gemini made the single text replacement. Both checks passed, and I verified the updated label on the deployed cards.
 
-Run the TypeScript check and production build afterward. Confirm that only `src/components/GymCard.tsx` was modified.
-
-Do not continue to another task.
-
-
-
-
-##prompt modification 3
-
-
-Modify only:
+## Prompt 8 — Clarify the browser-only demo reservation flow
 
 ```text
-src/components/OrderConfirmationScreen.tsx
+Modify only src/components/OrderConfirmationScreen.tsx.
+
+This is a browser-only prototype. Replace the following visible text so the page does not claim that a real order, reservation, verification or follow-up will occur. Do not change state, validation, generated demo values, event handlers or styling.
+
+Before submission, make these replacements:
+
+1. Back to All Gym Deals → Back to All Examples
+2. Selected Contract → Selected Example Contract
+3. Second-hand contract transfer with seller verified. Original fee: ${selectedContract.originalFee}/mo.
+   → Illustrative contract-transfer scenario. Example original fee: ${selectedContract.originalFee}/mo.
+4. Order Confirmation → Demo Reservation
+5. Enter your details so the contract transfer officer can reach you.
+   → Enter test details to preview the illustrative confirmation screen. Nothing will be submitted.
+6. Full Name → Test Name
+7. Phone Number (WhatsApp) → Test Phone Number
+8. Used strictly for contract transfer coordination.
+   → Used only in this browser demo and not sent anywhere.
+9. Confirm Order → Preview Demo Result
+
+After submission, make these replacements:
+
+1. Order Placed → Demo Reservation Created
+2. Your transfer reservation has been locked in. Our gym transfer desk will contact you via WhatsApp shortly.
+   → This browser-only prototype has not submitted a real reservation. No one will contact you.
+3. Reference Number → Demo Reference
+4. Quote this code for gym handover validation.
+   → Generated locally for this demonstration only.
+5. Transfer Queue → Demo Status
+6. Position: #{placedOrder.queuePosition} in line
+   → Illustrative position: #{placedOrder.queuePosition}
+7. Estimated coordinator response within 15 mins.
+   → No coordinator response will occur.
+8. Reservation Summary → Demo Summary
+9. Reserved for: → Entered name:
+10. Phone: → Test phone:
+11. Browse More Gym Deals → Browse More Examples
+
+Do not modify any other file. Search src after the edit and confirm that these phrases no longer remain: seller verified, Order Placed, locked in, WhatsApp shortly, response within 15 mins.
+
+Run the TypeScript check and production build. Report the results and confirm that only src/components/OrderConfirmationScreen.tsx changed.
 ```
 
-Make one wording-accuracy change: clearly present the existing form and result as a browser-only demonstration.
+**Result and review:** Gemini applied the wording changes only in `OrderConfirmationScreen.tsx`. It reported no remaining matches for the misleading phrases, and the TypeScript check and build passed. I manually tested both the form screen and the result screen on the deployed site.
 
-Do not change any state, validation, reference-number generation, event handler, component prop, styling or behavior.
-
-Make these text replacements.
-
-BEFORE SUBMISSION
-
-1. `Back to All Gym Deals`
-   → `Back to All Examples`
-
-2. `Selected Contract`
-   → `Selected Example Contract`
-
-3. Replace:
+## Prompt 9 — Add API attribution and final disclosure
 
 ```text
-Second-hand contract transfer with seller verified. Original fee:
+Modify only src/App.tsx.
+
+Update the existing footer so it contains:
+
+1. MMA Deal Hub (Singapore CBD & South)
+2. A visible attribution line: Live weather data by Open-Meteo.
+3. Make Open-Meteo a link to https://open-meteo.com/ and open it in a new tab using target="_blank" and rel="noreferrer".
+4. A disclosure: Gym contracts and the reservation flow are illustrative prototype data. No real order is submitted.
+5. Retain: Prototype created for MGMT 6110 Human-AI Collaboration.
+
+Remove the old wording “Built with invented data only.”
+
+Do not change application logic, weather behavior, other components, backend endpoints, configuration or package.json. Do not modify any other file.
+
+Run the TypeScript check and production build. Confirm that only src/App.tsx changed.
 ```
 
-with:
+**Result and review:** Gemini changed only the footer in `App.tsx`; the TypeScript check and build passed. I pushed the update, waited for Vercel's automatic deployment, and confirmed the attribution and disclosure on the live page.
 
-```text
-Illustrative contract-transfer scenario. Example original fee:
-```
+## Live deployment checks before state testing
 
-Keep the dynamic original-fee value unchanged.
+These were manual checks rather than Gemini prompts:
 
-4. `Order Confirmation`
-   → `Demo Reservation`
+- I opened `/api/weather` on the deployed site and saw JSON containing current temperature, precipitation, units, observation time and `source: "Open-Meteo"`.
+- I opened `/api/health` and saw `status: "ok"`, `credentialRequired: false` and `upstreamStatus: 200`.
+- I opened the main page and confirmed that the same live weather reading appeared in the header.
+- I tested the example selection and demo reservation screens.
 
-5. Replace:
+## Test 1 — Loading state
 
-```text
-Enter your details so the contract transfer officer can reach you.
-```
-
-with:
-
-```text
-Enter test details to preview the illustrative confirmation screen. Nothing will be submitted.
-```
-
-6. `Full Name`
-   → `Test Name`
-
-7. `Phone Number (WhatsApp)`
-   → `Test Phone Number`
-
-8. Replace:
-
-```text
-Used strictly for contract transfer coordination.
-```
-
-with:
-
-```text
-Used only in this browser demo and not sent anywhere.
-```
-
-9. `Confirm Order`
-   → `Preview Demo Result`
-
-AFTER SUBMISSION
-
-10. `Order Placed`
-    → `Demo Reservation Created`
-
-11. Replace:
-
-```text
-Your transfer reservation has been locked in. Our gym transfer desk will contact you via WhatsApp shortly.
-```
-
-with:
-
-```text
-This browser-only prototype has not submitted a real reservation. No one will contact you.
-```
-
-12. `Reference Number`
-    → `Demo Reference`
-
-13. Replace:
-
-```text
-Quote this code for gym handover validation.
-```
-
-with:
-
-```text
-Generated locally for this demonstration only.
-```
-
-14. `Transfer Queue`
-    → `Demo Status`
-
-15. Replace:
-
-```tsx
-Position: #{placedOrder.queuePosition} in line
-```
-
-with:
-
-```tsx
-Illustrative position: #{placedOrder.queuePosition}
-```
-
-Keep the existing dynamic queue-position value.
-
-16. Replace:
-
-```text
-Estimated coordinator response within 15 mins.
-```
-
-with:
-
-```text
-No coordinator response will occur.
-```
-
-17. `Reservation Summary`
-    → `Demo Summary`
-
-18. `Reserved for:`
-    → `Entered name:`
-
-19. `Phone:`
-    → `Test phone:`
-
-20. `Browse More Gym Deals`
-    → `Browse More Examples`
-
-GUARDRAILS
-
-- Modify visible wording only.
-- Do not change logic, form validation, state or event handlers.
-- Do not send or store the entered information.
-- Do not modify any other file.
-- Do not change the weather integration.
-- Do not add packages.
-
-After editing:
-
-1. Run the TypeScript check.
-2. Run the production build.
-3. Confirm that only `src/components/OrderConfirmationScreen.tsx` was modified.
-4. Confirm that `seller verified`, `Order Placed`, `locked in`, `WhatsApp shortly`, and `response within 15 mins` no longer appear.
-
-Show me the changed text and validation results. Do not continue to another file.
-
-
-##prompt modification 4
-
-Modify only:
-
-```text
-src/App.tsx
-```
-
-Make one footer-attribution change only.
-
-The footer currently says that the application is built with invented data only. That is no longer fully accurate because the weather is live data from Open-Meteo, while the gym contracts and reservation flow remain illustrative.
-
-Keep the existing footer layout and MGMT6110 context, but update its visible wording so it communicates:
-
-```text
-Live weather data by Open-Meteo.
-Gym contracts and the reservation flow are illustrative prototype data. No real order is submitted.
-```
-
-Requirements:
-
-1. “Open-Meteo” must be a clickable link to:
-
-```text
-https://open-meteo.com/
-```
-
-2. Open the link in a new tab using:
-
-```tsx
-target="_blank"
-rel="noreferrer"
-```
-
-3. Retain the existing text:
-
-```text
-MMA Deal Hub (Singapore CBD & South)
-```
-
-4. Retain a reference to:
-
-```text
-MGMT 6110 Human-AI Collaboration
-```
-
-5. Keep the footer concise and readable on mobile.
-
-GUARDRAILS
-
-- Modify footer wording and the Open-Meteo attribution link only.
-- Do not change application logic, navigation, components or styling outside the footer.
-- Do not modify the weather integration.
-- Do not modify any backend file.
-- Do not modify documentation.
-- Do not add a package.
-- Do not modify any file other than `src/App.tsx`.
-
-VALIDATION
-
-After editing:
-
-1. Run the TypeScript check.
-2. Run the production build.
-3. Confirm that only `src/App.tsx` was modified.
-4. Confirm that “Built with invented data only” no longer appears.
-5. Confirm that the Open-Meteo link uses `target="_blank"` and `rel="noreferrer"`.
-
-Show me the exact updated footer JSX and the validation results. Do not continue to another task.
-
-
-
-
-## Here are test prompts:
-
-## Test 1 — Loading
-
-### Prompt or action
-
-No Gemini prompt was used for this test.
-
-I opened the live website in Chrome and used Developer Tools:
-
-1. Opened the Network tab.
-2. Enabled `Disable cache`.
-3. Changed network throttling from `No throttling` to `3G`.
-4. Refreshed the live website.
-
-### Expected result
-
-While `/api/weather` was pending, the header should display:
+No code-change prompt was needed for this state. I opened Chrome DevTools, selected the Network panel, disabled the cache, selected the available `3G` throttling preset and refreshed the page. I captured the visible message:
 
 ```text
 Getting the latest Singapore CBD weather…
 ```
 
-### Result
+I then restored the browser to `No throttling`.
 
-The loading message and spinner appeared while the weather request was pending. I captured a screenshot and then restored the browser to `No throttling` and disabled the `Disable cache` option.
-
----
-
-## Test 2 — Empty
-
-### Prompt sent to Gemini
+## Prompt 10 — Test 2: Empty state
 
 ```text
 This is a temporary Empty-state test for MGMT6110 Problem Set 2.
 
-Modify only:
+Modify only api/weather.js.
 
-api/weather.js
-
-Make one temporary change only:
-
-In OPEN_METEO_URL, remove this query parameter:
+In the OPEN_METEO_URL, remove this query parameter:
 
 current=temperature_2m,precipitation
 
-Keep the latitude, longitude, daily forecast and timezone parameters unchanged.
+The resulting URL must be exactly:
 
-The resulting Open-Meteo request should still return HTTP 200 with daily data, but it should not contain the current object. The existing validation in api/weather.js should therefore return:
+https://api.open-meteo.com/v1/forecast?latitude=1.29&longitude=103.85&daily=temperature_2m_max&timezone=Asia%2FSingapore
 
-{
-  "data": null,
-  "source": "Open-Meteo"
-}
+Do not change any error handling, response logic, headers, timeout behavior or frontend file. The existing backend validation should detect that the required current reading is missing and return HTTP 200 with data: null.
 
-Do not change any error handling, response logic, frontend file, health endpoint, cache header or other file.
+Do not modify any other file.
 
-Run the production build afterward and confirm that only api/weather.js was modified.
+Run the production build and confirm:
 
-This is a deliberate temporary test. Do not attempt to fix the resulting Empty message.
+1. Only api/weather.js changed.
+2. The current parameter is absent.
+3. The build succeeds.
 ```
 
-### Gemini result
+**Result and review:** Gemini changed only the upstream URL and the build passed. I pushed the temporary test version. On the deployed site, `/api/weather` returned `data: null`, and the header displayed the empty-state message. I saved screenshots of both.
 
-Gemini modified only `api/weather.js` and changed the URL to:
-
-```javascript
-const OPEN_METEO_URL =
-  'https://api.open-meteo.com/v1/forecast?latitude=1.29&longitude=103.85&daily=temperature_2m_max&timezone=Asia%2FSingapore';
-```
-
-The production build succeeded.
-
-### Deployment and observed result
-
-I pushed the temporary change to GitHub with:
-
-```text
-test: verify empty weather state
-```
-
-After Vercel deployed it:
-
-- `/api/weather` returned `data: null`.
-- The homepage displayed:
-
-```text
-The weather service responded, but no current reading is available.
-```
-
-I captured screenshots of both results.
-
----
-
-## Test 3 — Refused
-
-### Prompt sent to Gemini
+## Prompt 11 — Test 3: Refused state
 
 ```text
 This is a temporary Refused-state test for MGMT6110 Problem Set 2.
 
-Modify only:
+Modify only api/weather.js.
 
-api/weather.js
-
-Make one temporary change to OPEN_METEO_URL.
-
-Restore the current parameter, but change the latitude to the deliberately invalid value 999.
-
-Use this exact URL:
+Set OPEN_METEO_URL to exactly:
 
 https://api.open-meteo.com/v1/forecast?latitude=999&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore
 
-Open-Meteo should respond with a non-2xx status because the latitude is invalid. The existing api/weather.js logic must remain unchanged and should return a response shaped like:
+The intentionally invalid latitude should make Open-Meteo return a non-2xx response. Keep the existing handler logic so /api/weather returns the upstream status with kind: "refused".
 
-{
-  "error": "The weather provider refused the request.",
-  "kind": "refused",
-  "upstreamStatus": 400
-}
+Do not change error handling, response shapes, timeout settings, cache headers or any frontend file. Do not modify any other file.
 
-Do not modify the error handling, frontend, health endpoint, cache behavior or any other file.
+Run the production build and confirm:
 
-Run the production build and confirm that only api/weather.js was modified.
-
-This is a deliberate temporary test. Do not fix the resulting Refused message.
+1. Only api/weather.js changed.
+2. Latitude is exactly 999.
+3. The current parameter is present again.
+4. The build succeeds.
 ```
 
-### Gemini result
+**Result and review:** Gemini set the intentionally invalid latitude and the build passed. After pushing the temporary version, I confirmed the refused JSON response and the refused-state message on the deployed page, then saved screenshots.
 
-Gemini modified only `api/weather.js` and changed the URL to:
-
-```javascript
-const OPEN_METEO_URL =
-  'https://api.open-meteo.com/v1/forecast?latitude=999&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore';
-```
-
-The production build succeeded.
-
-### Deployment and observed result
-
-I pushed the temporary change to GitHub with:
+## Prompt 12 — Test 4: Unreachable state
 
 ```text
-test: verify refused weather state
-```
+This is a temporary Unreachable-state test for MGMT6110 Problem Set 2.
 
-After Vercel deployed it:
+Modify only api/weather.js.
 
-- `/api/weather` returned `kind: "refused"` and `upstreamStatus: 400`.
-- The homepage displayed:
-
-```text
-The weather provider refused the request. Please try again later.
-```
-
-I captured screenshots of both results.
-
----
-
-## Test 4 — Unreachable
-
-### Prompt sent to Gemini
-
-```text
-This is the temporary Unreachable-state test for MGMT6110 Problem Set 2.
-
-Modify only:
-
-api/weather.js
-
-Replace OPEN_METEO_URL with this deliberately unreachable URL:
+Set OPEN_METEO_URL to exactly:
 
 https://weather-service-test.invalid/v1/forecast?latitude=1.29&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore
 
-The .invalid domain is deliberately non-existent. The existing fetch should fail, and the existing catch path should return HTTP 502:
+The reserved .invalid hostname should cause the upstream fetch to fail. Keep the existing catch and timeout behavior so /api/weather returns HTTP 502 with kind: "unreachable".
 
-{
-  "error": "The weather service could not be reached.",
-  "kind": "unreachable"
-}
+Do not change any response shape, error message, timeout, cache header or frontend file. Do not modify any other file.
 
-Do not change any error handling, timeout, response shape, frontend, health endpoint or other file.
+Run the production build and confirm:
 
-Run the production build and confirm that only api/weather.js was modified.
-
-This is a deliberate temporary test. Do not fix it yet.
+1. Only api/weather.js changed.
+2. The hostname is exactly weather-service-test.invalid.
+3. Latitude is back to 1.29.
+4. The current parameter is present.
+5. The build succeeds.
 ```
 
-### Gemini result
+**Result and review:** Gemini changed only the test URL and the build passed. After pushing the temporary version, I confirmed the unreachable JSON response and the corresponding message on the deployed page, then saved screenshots.
 
-Gemini modified only `api/weather.js` and changed the URL to:
-
-```javascript
-const OPEN_METEO_URL =
-  'https://weather-service-test.invalid/v1/forecast?latitude=1.29&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore';
-```
-
-The production build succeeded.
-
-### Deployment and observed result
-
-I pushed the temporary change to GitHub with:
+## Prompt 13 — Restore the production endpoint
 
 ```text
-test: verify unreachable weather state
+The temporary Unreachable-state test is complete. Restore the production weather service now.
+
+Modify only api/weather.js.
+
+Set OPEN_METEO_URL back to exactly:
+
+https://api.open-meteo.com/v1/forecast?latitude=1.29&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore
+
+Do not change any error handling, response logic, response shape, timeout, cache header or frontend file. Do not modify any other file.
+
+After restoring it:
+
+1. Confirm that only api/weather.js changed.
+2. Confirm that the hostname is exactly api.open-meteo.com.
+3. Confirm that latitude is exactly 1.29.
+4. Confirm that current=temperature_2m,precipitation is present.
+5. Search api and confirm that the .invalid hostname no longer appears.
+6. Run the production build and report the result.
 ```
 
-After Vercel deployed it:
+**Result and review:** Gemini restored the exact production URL, confirmed that the `.invalid` hostname was removed and reported a successful build. I pushed the restored version and verified the live success state again through the homepage, `/api/weather` and `/api/health`.
 
-- `/api/weather` returned HTTP 502 with `kind: "unreachable"`.
-- The homepage displayed:
+## Where I stopped prompting
 
-```text
-The weather service cannot be reached right now. Please try again later.
-```
-
-I captured screenshots of both results.
-
----
-
-## Restore the Production Endpoint
-
-### Prompt sent to Gemini
-
-```text
-The Unreachable-state test is complete. Restore the production weather service immediately.
-
-Modify only:
-
-api/weather.js
-
-Replace the temporary .invalid URL with this exact working production URL:
-
-https://api.open-meteo
-
-
-
-
-
-
+I stopped requesting further product changes after restoring the production endpoint because the required end-to-end path was working: the browser called my `/api/weather` backend, the backend called Open-Meteo, the live data appeared in the interface, `/api/health` reported the upstream status, and I had directly tested loading, empty, refused and unreachable states. Further visual refinement would not materially improve the core backend/API integration required for this problem set.
 
 
 
