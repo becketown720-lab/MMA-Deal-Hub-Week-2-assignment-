@@ -62,23 +62,6 @@ Point 3: Before deploying any AI-assisted generated application, business units 
 
 ---
 
-##Assessment — MGMT6110 Problem Set 2
-
-**Student:** Beichao Wang  
-**Project:** MMA Deal Hub  
-**Live site:** https://my-projectmmadealhub.vercel.app/  
-**GitHub repository:** https://github.com/becketown720-lab/MMA-Deal-Hub-Week-2-assignment-
-
-## What was missing from the Problem Set 1 prototype
-
-My original prototype made several claims that its code could not support with real evidence.
-
-1. The screen presented gym names, prices, discounts and availability as real deals, but those values were fictional data created for the prototype. I could not identify a reliable public source for second-hand MMA membership contracts, so I kept the examples but labelled them clearly as fictional and illustrative.
-2. The screen used phrases such as “verified,” “transfer approved” and “save up to 40%,” although there was no verification service or live listing database behind those claims. I removed or replaced those phrases instead of pretending that an API could validate them.
-3. The confirmation flow claimed that an order was placed, a queue position was assigned and a coordinator would contact the user. The form only changed local browser state and sent nothing to a server, so I relabelled the entire flow as a browser-only demonstration.
-
-Because the core contract data could not be sourced truthfully, I chose one smaller claim that could be supported by a real external source: current weather for central Singapore. This is relevant to a user deciding whether to travel to a CBD gym. The browser now calls my own `/api/weather` function, which calls Open-Meteo and returns current temperature, precipitation and observation time. The fictional contract examples remain clearly disclosed as prototype data.
-
 # Assessment — MGMT6110 Problem Set 2
 
 **Student:** Beichao Wang  
