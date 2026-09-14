@@ -75,7 +75,7 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // State B: Order Placed
+  // State B: Demo Reservation Created
   if (placedOrder) {
     return (
       <div id="order-placed-view" className="space-y-5 animate-in fade-in duration-300">
@@ -88,10 +88,10 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
             <CheckCircle2 className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-            Order Placed
+            Demo Reservation Created
           </h2>
           <p className="text-emerald-100 text-sm max-w-md mx-auto">
-            Your transfer reservation has been locked in. Our gym transfer desk will contact you via WhatsApp shortly.
+            This browser-only prototype has not submitted a real reservation. No one will contact you.
           </p>
         </section>
 
@@ -106,7 +106,7 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                   <Ticket className="w-3.5 h-3.5" />
-                  Reference Number
+                  Demo Reference
                 </span>
                 <button
                   id="copy-ref-btn"
@@ -132,7 +132,7 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
                 {placedOrder.referenceNumber}
               </div>
               <p className="text-[11px] text-slate-500 mt-1">
-                Quote this code for gym handover validation.
+                Generated locally for this demonstration only.
               </p>
             </div>
 
@@ -140,16 +140,16 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
             <div className="bg-amber-50 p-4 rounded-xl border border-amber-200">
               <span className="text-xs font-bold uppercase tracking-wider text-amber-800 flex items-center gap-1 mb-1">
                 <Users className="w-3.5 h-3.5" />
-                Transfer Queue
+                Demo Status
               </span>
               <div
                 id="generated-queue-position"
                 className="text-2xl sm:text-3xl font-black text-amber-700"
               >
-                Position: #{placedOrder.queuePosition} in line
+                Illustrative position: #{placedOrder.queuePosition}
               </div>
               <p className="text-[11px] text-amber-800/80 mt-1">
-                Estimated coordinator response within 15 mins.
+                No coordinator response will occur.
               </p>
             </div>
           </div>
@@ -157,7 +157,7 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
           {/* Order Summary Details */}
           <div className="pt-4 border-t border-slate-200 space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-              Reservation Summary
+              Demo Summary
             </h3>
 
             <div className="bg-slate-50 p-3.5 rounded-xl text-sm space-y-2 border border-slate-100">
@@ -170,8 +170,8 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
                 <span className="font-semibold text-amber-700">{placedOrder.contract.remainingMonths} months left</span>
               </div>
               <div className="flex justify-between items-center text-slate-600 text-xs pt-1 border-t border-slate-200/60">
-                <span>Reserved for: <strong className="text-slate-800">{placedOrder.customerName}</strong></span>
-                <span>Phone: <strong className="text-slate-800">{placedOrder.customerPhone}</strong></span>
+                <span>Entered name: <strong className="text-slate-800">{placedOrder.customerName}</strong></span>
+                <span>Test phone: <strong className="text-slate-800">{placedOrder.customerPhone}</strong></span>
               </div>
             </div>
           </div>
@@ -183,7 +183,7 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
             className="w-full min-h-[48px] bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Browse More Gym Deals</span>
+            <span>Browse More Examples</span>
           </button>
         </section>
       </div>
@@ -201,7 +201,7 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
           className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-600 hover:text-slate-900 min-h-[44px] px-1"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to All Gym Deals</span>
+          <span>Back to All Examples</span>
         </button>
       </div>
 
@@ -211,7 +211,7 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
         className="bg-white rounded-2xl border-2 border-amber-500/60 p-5 shadow-sm space-y-3 relative overflow-hidden"
       >
         <div className="inline-block bg-amber-100 text-amber-800 text-[11px] font-bold px-2.5 py-0.5 rounded-md uppercase tracking-wider">
-          Selected Contract
+          Selected Example Contract
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -239,7 +239,7 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
 
         <div className="pt-2 border-t border-slate-100 text-xs text-slate-500 flex items-center gap-1">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Second-hand contract transfer with seller verified. Original fee: ${selectedContract.originalFee}/mo.</span>
+          <span>Illustrative contract-transfer scenario. Example original fee: ${selectedContract.originalFee}/mo.</span>
         </div>
       </section>
 
@@ -250,10 +250,10 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
       >
         <div>
           <h3 className="text-lg font-bold text-slate-900">
-            Order Confirmation
+            Demo Reservation
           </h3>
           <p className="text-xs text-slate-500 mt-0.5">
-            Enter your details so the contract transfer officer can reach you.
+            Enter test details to preview the illustrative confirmation screen. Nothing will be submitted.
           </p>
         </div>
 
@@ -273,7 +273,7 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
               htmlFor="customer-name-input"
               className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"
             >
-              Full Name
+              Test Name
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -297,7 +297,7 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
               htmlFor="customer-phone-input"
               className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"
             >
-              Phone Number (WhatsApp)
+              Test Phone Number
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -314,7 +314,7 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
               />
             </div>
             <p className="text-[11px] text-slate-400 mt-1">
-              Used strictly for contract transfer coordination.
+              Used only in this browser demo and not sent anywhere.
             </p>
           </div>
 
@@ -324,7 +324,7 @@ export const OrderConfirmationScreen: React.FC<OrderConfirmationScreenProps> = (
             type="submit"
             className="w-full min-h-[50px] bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-black text-base rounded-xl flex items-center justify-center gap-2 transition shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 mt-2"
           >
-            <span>Confirm Order</span>
+            <span>Preview Demo Result</span>
             <CheckCircle2 className="w-5 h-5 text-slate-950" />
           </button>
         </form>
