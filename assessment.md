@@ -62,61 +62,102 @@ Point 3: Before deploying any AI-assisted generated application, business units 
 
 ---
 
-# Problem Set 2
+##Assessment — MGMT6110 Problem Set 2
 
-## Claims identified in the original product
+**Student:** Beichao Wang  
+**Project:** MMA Deal Hub  
+**Live site:** https://my-projectmmadealhub.vercel.app/  
+**GitHub repository:** https://github.com/becketown720-lab/MMA-Deal-Hub-Week-2-assignment-
 
-……
+## What was missing from the Problem Set 1 prototype
 
-## Front-end criteria and assessment
+My original prototype made several claims that its code could not support with real evidence.
 
-……
+1. The screen presented gym names, prices, discounts and availability as real deals, but those values were fictional data created for the prototype. I could not identify a reliable public source for second-hand MMA membership contracts, so I kept the examples but labelled them clearly as fictional and illustrative.
+2. The screen used phrases such as “verified,” “transfer approved” and “save up to 40%,” although there was no verification service or live listing database behind those claims. I removed or replaced those phrases instead of pretending that an API could validate them.
+3. The confirmation flow claimed that an order was placed, a queue position was assigned and a coordinator would contact the user. The form only changed local browser state and sent nothing to a server, so I relabelled the entire flow as a browser-only demonstration.
 
-## Back-end criteria and assessment
-## PS2 — Manual API validation
+Because the core contract data could not be sourced truthfully, I chose one smaller claim that could be supported by a real external source: current weather for central Singapore. This is relevant to a user deciding whether to travel to a CBD gym. The browser now calls my own `/api/weather` function, which calls Open-Meteo and returns current temperature, precipitation and observation time. The fictional contract examples remain clearly disclosed as prototype data.
 
-Before asking Gemini to build the backend, I manually opened the Open-Meteo API endpoint in my browser.
+# Assessment — MGMT6110 Problem Set 2
 
-Endpoint:
+**Student:** Beichao Wang  
+**Project:** MMA Deal Hub  
+**Live site:** https://my-projectmmadealhub.vercel.app/  
+**GitHub repository:** https://github.com/becketown720-lab/MMA-Deal-Hub-Week-2-assignment-
 
-https://api.open-meteo.com/v1/forecast?latitude=1.29&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore
+## What was missing from the Problem Set 1 prototype
 
-The request loaded successfully and returned JSON data. The relevant part of the real response was:
+My original prototype made several claims that its code could not support with real evidence.
 
-```json
-{
-  "latitude": 1.3005272,
-  "longitude": 103.862564,
-  "timezone": "Asia/Singapore",
-  "timezone_abbreviation": "GMT+8",
-  "current_units": {
-    "time": "iso8601",
-    "interval": "seconds",
-    "temperature_2m": "°C",
-    "precipitation": "mm"
-  },
-  "current": {
-    "time": "2026-09-13T17:15",
-    "interval": 900,
-    "temperature_2m": 30.5,
-    "precipitation": 0
-  }
-}
-```
+1. The screen presented gym names, prices, discounts and availability as real deals, but those values were fictional data created for the prototype. I could not identify a reliable public source for second-hand MMA membership contracts, so I kept the examples but labelled them clearly as fictional and illustrative.
+2. The screen used phrases such as “verified,” “transfer approved” and “save up to 40%,” although there was no verification service or live listing database behind those claims. I removed or replaced those phrases instead of pretending that an API could validate them.
+3. The confirmation flow claimed that an order was placed, a queue position was assigned and a coordinator would contact the user. The form only changed local browser state and sent nothing to a server, so I relabelled the entire flow as a browser-only demonstration.
 
-I verified that the frontend would need to read:
+Because the core contract data could not be sourced truthfully, I chose one smaller claim that could be supported by a real external source: current weather for central Singapore. This is relevant to a user deciding whether to travel to a CBD gym. The browser now calls my own `/api/weather` function, which calls Open-Meteo and returns current temperature, precipitation and observation time. The fictional contract examples remain clearly disclosed as prototype data.
 
-- `current.time`
-- `current.temperature_2m`
-- `current.precipitation`
-- `current_units.temperature_2m`
-- `current_units.precipitation`
+## Front-end criteria and self-assessment
 
-This manual check was necessary so that the AI would use the real response field names instead of guessing them.
-……
+| Criterion | Why it matters to this user | How another person can test it | Mark and evidence |
+|---|---|---|---|
+| **1. A first-time visitor understands the product and its limits.** | A CBD office worker should quickly understand that this is a contract-transfer prototype and should not mistake example listings for real offers. | Open the home page without prior explanation and read the main heading, introductory copy, listing status and footer. | **Met.** The page describes the contracts as examples and fictional prototype data. Cards say “Illustrative listing,” and the footer states that no real order is submitted. |
+| **2. The main demonstration flow can be completed without instruction.** | The product exists to let a user explore an example, enter test details and preview a result. | Select a contract example, enter a test name and phone number, submit the form, view the demo result and return to the examples. | **Met.** I completed this flow on the deployed site. The form labels, result screen and return controls all describe a demonstration rather than a real transaction. |
+| **3. Live weather is understandable and traceable.** | A user should be able to distinguish the live value from the fictional listings and know when and where it came from. | Compare the header with `/api/weather`, check the observation time and follow the source link in the footer. | **Met.** The header shows current CBD temperature, precipitation and observation time. The footer credits and links to Open-Meteo. |
+| **4. The screen explains different data states in useful language.** | If an external provider is slow, empty, refusing requests or unreachable, the user should not see a permanent spinner or blank area. | Reproduce the loading, empty, refused and unreachable conditions and compare the visible messages. | **Met.** I deliberately tested all four states. Each produced a different sentence that described what was happening. |
+| **5. The interface remains usable at narrow widths.** | A user may open the product on a phone while travelling to or from work. | Open the deployed site at a phone-sized width and complete the discovery and demo reservation flow without horizontal scrolling or hidden controls. | **Partly met.** The components use responsive layouts and long status messages wrap, but my recorded final checks were mainly on a desktop browser. I did not complete a full final test on a physical phone. |
+| **6. The live weather materially changes the user’s gym decision.** | Live data is most valuable when it helps the user choose an action rather than acting as decoration. | Compare recommendations or interface behavior under different weather values and check whether the product explains how weather affects a gym choice. | **Not met.** Weather is current and visible, but it does not filter, rank or change the contract examples. It provides context only. A later version could use rain conditions to suggest nearer MRT options without pretending the fictional listings are real. |
 
-## Human-AI collaboration questions
+## Back-end criteria and self-assessment
 
-……
+| Criterion | Why it matters to this user | How another person can test it | Mark and evidence |
+|---|---|---|---|
+| **1. The browser reaches the external source only through my back end.** | The server boundary makes the data flow easier to control and prevents provider details or future credentials from being placed in browser code. | Inspect the Network panel and search `src` for `api.open-meteo.com`; the browser should request `/api/weather` only. | **Met.** `Header.tsx` fetches the relative `/api/weather` route, and the Open-Meteo URL exists only in the server functions. |
+| **2. The function maps the real response shape without inventing values.** | Incorrect field names or treating zero as missing would silently show false weather information. | Call Open-Meteo manually, compare its fields with `/api/weather`, and test a valid precipitation value of zero. | **Met.** I called Open-Meteo before prompting and supplied the observed `current` and `current_units` fields to Gemini. The function checks `null` and `undefined`, so `0` remains valid. |
+| **3. Empty, refused and unreachable conditions remain distinct.** | These conditions have different causes and should support different user responses and debugging actions. | Temporarily remove the current fields, use an invalid latitude, and use a nonexistent hostname; inspect both endpoint JSON and the page each time. | **Met.** The empty test returned HTTP 200 with `data: null`; the refused test returned the provider’s non-2xx status with `kind: "refused"`; the unreachable test returned HTTP 502 with `kind: "unreachable"`. |
+| **4. The health endpoint reports useful status without exposing unnecessary details.** | Someone maintaining the product should be able to separate an app problem from an upstream problem quickly. | Open `/api/health` and confirm that it reports service status, credential requirement, upstream status and check time without returning the upstream body or URL. | **Met.** The deployed endpoint returned `status: "ok"`, `service: "Open-Meteo"`, `credentialRequired: false`, `upstreamStatus: 200` and a runtime timestamp. It uses `Cache-Control: no-store`. |
+| **5. No secret is exposed or invented.** | A public repository must not leak credentials, and a no-key provider should not lead to unnecessary secret handling. | Search the repository and browser bundle for API keys or invented environment variables, and check the health response. | **Met.** Open-Meteo requires no key. The project introduces no weather credential or environment variable, and the health endpoint explicitly reports `credentialRequired: false`. |
+| **6. External calls have bounded waiting and appropriate caching.** | A slow provider should not leave the function waiting indefinitely, and repeated page loads should not call a relatively stable source unnecessarily. | Inspect `api/weather.js` for the timeout and cache policy, then inspect deployed response headers and test an actual timeout. | **Partly met.** The code uses an eight-second `AbortController` timeout and `s-maxage=900, stale-while-revalidate=1800`. I tested a network failure with a nonexistent hostname, but I did not independently time an eight-second timeout or record the deployed cache header in the browser. |
+
+## Four-state test record
+
+| State | Test method | Evidence observed | Final action |
+|---|---|---|---|
+| **Loading** | Enabled `3G` throttling in Chrome DevTools, disabled cache and refreshed. | The header displayed “Getting the latest Singapore CBD weather…” while the request was pending. | Restored `No throttling`. |
+| **Empty** | Temporarily removed `current=temperature_2m,precipitation` from the Open-Meteo request. | `/api/weather` returned `data: null`, and the page said that no current reading was available. | Continued to the next controlled test. |
+| **Refused** | Restored the current fields and temporarily set latitude to `999`. | Open-Meteo returned a non-2xx response; my endpoint classified it as `refused`, and the page said the provider refused the request. | Continued to the next controlled test. |
+| **Unreachable** | Temporarily changed the provider host to `weather-service-test.invalid`. | My endpoint returned HTTP 502 with `kind: "unreachable"`, and the page said that the service could not be reached. | Restored the correct production endpoint. |
+
+After the tests, I restored the exact production URL with latitude `1.29`, removed the `.invalid` hostname, pushed the final version and checked the deployment again. The home page returned to the live success state, `/api/weather` returned current Open-Meteo data, and `/api/health` reported an upstream status of 200.
+
+## Human–AI collaboration assessment
+
+### Q1. Where did the agent make you faster, and by how much?
+
+Gemini made me fastest when producing bounded pieces of implementation after I had already decided the behavior. For example, it created `api/weather.js`, including the fetch, timeout, response mapping and error branches, in a few minutes. Writing this from scratch would first have required me to learn the Vercel function format and then debug JavaScript response handling, which I estimate would have taken me at least several hours. The core weather function, health endpoint and React connection were completed through a series of short prompts and checks instead. I used the time saved to call the source manually, read the generated code, inspect the deployed JSON and deliberately test failure states. This was mainly code I could not have written confidently without examples, rather than typing I already knew how to do slowly.
+
+### Q2. Where did it cost you time, and whose fault was that?
+
+The clearest loss of time occurred when I asked AI Studio to revise the prototype wording. The interface froze, and after I refreshed it showed a checkpoint for three documentation files even though the requested strings in `GymDiscoveryScreen.tsx` had not changed. I lost roughly fifteen minutes checking the screen, locating the component and confirming that the old text was still present. The tool failed to complete or clearly report the requested edit, but my first wording instruction also left room for interpretation. I corrected both problems by inspecting the target file myself and sending a shorter prompt containing exact before-and-after replacements for one file. The retry succeeded. This showed me that a concise, testable instruction is cheaper to recover than a broad instruction such as “clarify the prototype.”
+
+### Q3. Did it ever hand you something that looked right and was not?
+
+Yes. Gemini’s first `api/health.js` response said that `Cache-Control: no-store` was applied to every health response. The explanation sounded complete and the build passed. However, the code defined `responseHeaders` after the request-method check, so the early HTTP 405 response returned before that header could be applied. I found this while reading the file before moving to frontend integration. I rejected the claim that every path was covered and sent a correction prompt that moved the header definition before the method check and passed it to the 405 response. The second version preserved the other behavior and met the stated requirement.
+
+### Q4. What did you have to know in order to supervise it?
+
+To catch the health-endpoint mistake, I had to understand that an early `return` ends the function and that headers set later cannot affect a response that has already been sent. A successful build only proved that the syntax was valid; it did not prove that every runtime path satisfied the requirement. I also needed to understand the real Open-Meteo response shape and that precipitation of `0` is valid data. That is why I called the API manually and gave Gemini the exact `current` and `current_units` fields before it wrote the parser. One weakness in my supervision is that I did not independently inspect the deployed cache header or force the full eight-second timeout. Catching those gaps would require checking response headers and timing behavior, not only reading the source and viewing the page.
+
+### Q5. Which decisions did you keep, and should you have kept more or fewer?
+
+I kept the decisions about product scope, source selection and user-facing truthfulness. I chose Open-Meteo because it was public, required no credential and supplied a current fact relevant to travel in central Singapore. I decided that unsourced gym listings should be labelled fictional rather than presented as verified deals. I also specified the separate loading, empty, refused and unreachable messages, the 15-minute cache period, the health information that could be returned safely, and the browser-only wording for the reservation demonstration. I delegated production work such as JavaScript syntax, TypeScript types, component markup and build checks. At first, I had allowed the earlier AI-generated interface to settle a decision I should have kept: it presented fictional listings and local state changes as verified contracts and a real order. I corrected that boundary after deployment by rewriting the visible claims. I would keep product claims and failure messages under human approval in future, while continuing to delegate implementation details.
+
+### Q6. What would this mean for a team of thirty?
+
+For a team of thirty, I would require a short written API contract and user-facing acceptance criteria before code generation begins. Every AI-generated change would enter through a small pull request owned by a named person and reviewed by a second person before merging. Automated checks would cover types, builds, secret scanning and contract tests for success, empty, refused and unreachable responses. A staging deployment and its health endpoint would be checked before a scheduled production release. The agent would not be allowed to settle the choice of data source, unsupported business claims, privacy behavior, cache policy or failure messages without an accountable human approving those decisions. The prompt log and a brief decision record would remain with each pull request so reviewers could see what the agent produced, what the owner verified and where a product decision may have been hidden inside generated code.
+
+## Current limitations I would address next
+
+The production weather integration works, but it remains contextual rather than central to the gym-selection task. I would next connect weather to a modest, explainable user action, such as highlighting examples closest to an MRT station when rain is present. Before doing that, I would test the complete flow on a physical phone, inspect the deployed cache headers and add repeatable endpoint tests so future changes do not require temporarily changing the production URL.
+
 
 
