@@ -474,7 +474,11 @@ Show me:
 Do not modify the footer or other prototype wording yet.
 Do not proceed to attribution or documentation.
 
-##prompt modification
+
+
+##prompt modification 1
+
+
 
 Modify only `src/components/GymDiscoveryScreen.tsx`.
 
@@ -513,6 +517,194 @@ Do not modify any other file.
 After editing, run the TypeScript check and build. Confirm that only `src/components/GymDiscoveryScreen.tsx` was modified. Do not continue to another task.
 
 
+##prompt modification 2
+
+
+Modify only `src/components/GymCard.tsx`.
+
+Make one text change only:
+
+Replace:
+
+```text
+Transfer approved
+```
+
+with:
+
+```text
+Illustrative listing
+```
+
+Do not change any other text, calculation, styling, component prop, button behavior or file.
+
+Run the TypeScript check and production build afterward. Confirm that only `src/components/GymCard.tsx` was modified.
+
+Do not continue to another task.
 
 
 
+
+##prompt modification 3
+
+
+Modify only:
+
+```text
+src/components/OrderConfirmationScreen.tsx
+```
+
+Make one wording-accuracy change: clearly present the existing form and result as a browser-only demonstration.
+
+Do not change any state, validation, reference-number generation, event handler, component prop, styling or behavior.
+
+Make these text replacements.
+
+BEFORE SUBMISSION
+
+1. `Back to All Gym Deals`
+   → `Back to All Examples`
+
+2. `Selected Contract`
+   → `Selected Example Contract`
+
+3. Replace:
+
+```text
+Second-hand contract transfer with seller verified. Original fee:
+```
+
+with:
+
+```text
+Illustrative contract-transfer scenario. Example original fee:
+```
+
+Keep the dynamic original-fee value unchanged.
+
+4. `Order Confirmation`
+   → `Demo Reservation`
+
+5. Replace:
+
+```text
+Enter your details so the contract transfer officer can reach you.
+```
+
+with:
+
+```text
+Enter test details to preview the illustrative confirmation screen. Nothing will be submitted.
+```
+
+6. `Full Name`
+   → `Test Name`
+
+7. `Phone Number (WhatsApp)`
+   → `Test Phone Number`
+
+8. Replace:
+
+```text
+Used strictly for contract transfer coordination.
+```
+
+with:
+
+```text
+Used only in this browser demo and not sent anywhere.
+```
+
+9. `Confirm Order`
+   → `Preview Demo Result`
+
+AFTER SUBMISSION
+
+10. `Order Placed`
+    → `Demo Reservation Created`
+
+11. Replace:
+
+```text
+Your transfer reservation has been locked in. Our gym transfer desk will contact you via WhatsApp shortly.
+```
+
+with:
+
+```text
+This browser-only prototype has not submitted a real reservation. No one will contact you.
+```
+
+12. `Reference Number`
+    → `Demo Reference`
+
+13. Replace:
+
+```text
+Quote this code for gym handover validation.
+```
+
+with:
+
+```text
+Generated locally for this demonstration only.
+```
+
+14. `Transfer Queue`
+    → `Demo Status`
+
+15. Replace:
+
+```tsx
+Position: #{placedOrder.queuePosition} in line
+```
+
+with:
+
+```tsx
+Illustrative position: #{placedOrder.queuePosition}
+```
+
+Keep the existing dynamic queue-position value.
+
+16. Replace:
+
+```text
+Estimated coordinator response within 15 mins.
+```
+
+with:
+
+```text
+No coordinator response will occur.
+```
+
+17. `Reservation Summary`
+    → `Demo Summary`
+
+18. `Reserved for:`
+    → `Entered name:`
+
+19. `Phone:`
+    → `Test phone:`
+
+20. `Browse More Gym Deals`
+    → `Browse More Examples`
+
+GUARDRAILS
+
+- Modify visible wording only.
+- Do not change logic, form validation, state or event handlers.
+- Do not send or store the entered information.
+- Do not modify any other file.
+- Do not change the weather integration.
+- Do not add packages.
+
+After editing:
+
+1. Run the TypeScript check.
+2. Run the production build.
+3. Confirm that only `src/components/OrderConfirmationScreen.tsx` was modified.
+4. Confirm that `seller verified`, `Order Placed`, `locked in`, `WhatsApp shortly`, and `response within 15 mins` no longer appear.
+
+Show me the changed text and validation results. Do not continue to another file.
