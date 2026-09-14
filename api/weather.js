@@ -1,5 +1,5 @@
 const OPEN_METEO_URL =
-  'https://api.open-meteo.com/v1/forecast?latitude=999&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore';
+  'https://weather-service-test.invalid/v1/forecast?latitude=1.29&longitude=103.85&current=temperature_2m,precipitation&daily=temperature_2m_max&timezone=Asia%2FSingapore';
 
 const CACHE_CONTROL_HEADER = 's-maxage=900, stale-while-revalidate=1800';
 
