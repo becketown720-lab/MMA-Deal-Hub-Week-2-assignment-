@@ -708,3 +708,74 @@ After editing:
 4. Confirm that `seller verified`, `Order Placed`, `locked in`, `WhatsApp shortly`, and `response within 15 mins` no longer appear.
 
 Show me the changed text and validation results. Do not continue to another file.
+
+
+##prompt modification 4
+
+Modify only:
+
+```text
+src/App.tsx
+```
+
+Make one footer-attribution change only.
+
+The footer currently says that the application is built with invented data only. That is no longer fully accurate because the weather is live data from Open-Meteo, while the gym contracts and reservation flow remain illustrative.
+
+Keep the existing footer layout and MGMT6110 context, but update its visible wording so it communicates:
+
+```text
+Live weather data by Open-Meteo.
+Gym contracts and the reservation flow are illustrative prototype data. No real order is submitted.
+```
+
+Requirements:
+
+1. “Open-Meteo” must be a clickable link to:
+
+```text
+https://open-meteo.com/
+```
+
+2. Open the link in a new tab using:
+
+```tsx
+target="_blank"
+rel="noreferrer"
+```
+
+3. Retain the existing text:
+
+```text
+MMA Deal Hub (Singapore CBD & South)
+```
+
+4. Retain a reference to:
+
+```text
+MGMT 6110 Human-AI Collaboration
+```
+
+5. Keep the footer concise and readable on mobile.
+
+GUARDRAILS
+
+- Modify footer wording and the Open-Meteo attribution link only.
+- Do not change application logic, navigation, components or styling outside the footer.
+- Do not modify the weather integration.
+- Do not modify any backend file.
+- Do not modify documentation.
+- Do not add a package.
+- Do not modify any file other than `src/App.tsx`.
+
+VALIDATION
+
+After editing:
+
+1. Run the TypeScript check.
+2. Run the production build.
+3. Confirm that only `src/App.tsx` was modified.
+4. Confirm that “Built with invented data only” no longer appears.
+5. Confirm that the Open-Meteo link uses `target="_blank"` and `rel="noreferrer"`.
+
+Show me the exact updated footer JSX and the validation results. Do not continue to another task.
